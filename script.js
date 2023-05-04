@@ -50,4 +50,5 @@ $(function () {
   // this selects and prints the current day of the week, month, date, and year on the webpage
   var currentDay = dayjs();  
   $('#currentDay').text(currentDay.format('dddd, MMMM D, YYYY'));
+
 });
