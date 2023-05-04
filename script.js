@@ -1,15 +1,19 @@
-// Wrap all code that interacts with the DOM in a call to jQuery to ensure that
-// the code isn't run until the browser has finished rendering all the elements
-// in the html.
-$(function () {
-  // TODO: Add a listener for click events on the save button. This code should
-  // use the id in the containing time-block as a key to save the user input in
-  // local storage. HINT: What does `this` reference in the click listener
-  // function? How can DOM traversal be used to get the "hour-x" id of the
-  // time-block containing the button that was clicked? How might the id be
-  // useful when saving the description in local storage?
-  //
+// variable to identify the save buttons
+var saveButton = $('.saveBtn');
 
+$(function () {
+// this is a click event for all save buttons on the webpage
+  saveButton.on('click', function() {
+    // variable to identify the text content being entered into each specific timeblock
+    var scheduleInput = $(this).siblings('textarea').val();
+    // variable to identify each individual time block with its associated save button
+    var hourBlock = $(this).closest(".time-block").attr("id");
+    // if text is entered in a time block and the save button is clicked, the text content
+    // is saved to localstorage
+    if (scheduleInput) {
+      localStorage.setItem(hourBlock, JSON.stringify(scheduleInput));
+    };
+  });
   
   // new variable to select the current hour of the current day with dayjs
   var currentTime = dayjs().hour();
@@ -30,10 +34,18 @@ $(function () {
 
   changeColor();
 
-  
-  // TODO: Add code to get any user input that was saved in localStorage and set
-  // the values of the corresponding textarea elements. HINT: How can the id
-  // attribute of each time-block be used to do this?
+  $(function () {
+    // function targeting each time block
+    $('.time-block').each(function () {
+      var hourBlock = $(this).attr('id');
+      var storedInput = localStorage.getItem(hourBlock);
+      // if a scheduled event is saved to localstorage, that scheduled event will remain on display
+      // even if the webpage is refreshed
+      if (storedInput) {
+        $(this).find('textarea').val(JSON.parse(storedInput));
+      }
+    });
+  });
   
   // this selects and prints the current day of the week, month, date, and year on the webpage
   var currentDay = dayjs();  
